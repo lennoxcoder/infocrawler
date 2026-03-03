@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <title>TechNews</title>
+    <style>
+        body {
+            margin: 0;
+            align-items: center;
+            font-family: sans-serif;
+            background: #0b3d02;
+            color: #ffffff;
+        }
+
+        header {
+            padding: 1rem;
+            text-align: center;
+            background: #082b02;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        #snippets {
+            max-width: 90vw;
+            margin: 2rem auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .snippet {
+            background: #e6f5e6;
+            color: #092e03;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 6px 6px 8px black;
+
+        }
+
+        .btn-update {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #092e03;
+            background-color: #e6f5e6;
+            border: 1px solid #092e03;
+            border-radius: 8px;
+            margin: auto;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-update:hover {
+            opacity: 0.8;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <header>Last Tech News</header>
+
+    <div id="snippets">
+        <div class="snippet">Press Update Button...</div>
+    </div>
+
+    <button onclick="window.location.href='/news'" class="btn-update">Update</button>
+
+</body>
+
+<script>
+
+//====================================================================
+
+function addSnippet(texto) {
+    const div = document.createElement('div');
+    div.className = 'snippet';
+    div.textContent = texto;
+    container.appendChild(div);
+}
+
+
+</script>
+
+
+</html>
