@@ -1,40 +1,55 @@
-
+import http from 'node:http';
 import { readFileSync } from 'fs';
-import path from 'path';
 import fetxml from './fetxml.js'
 
 
 
-export default async function handler(req, res) {
+const server = http.createServer(async (req, res) => {
+
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  if (req.url === '/' || req.url === '/index.html') {
+   if (req.url === '/') {
+
     try {
-      const filePath = path.join(process.cwd(), 'index.html');
-      const htmlContent = readFileSync(filePath, 'utf-8');
+      const htmlContent = readFileSync("index.html", 'utf-8');
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      return res.end(htmlContent);
+      res.writeHead(200);
+      res.end(htmlContent);
     } catch (error) {
-      return res.writeHead(500).end('Erro ao carregar página');
+      console.error('Erro ao ler index.html:', error);
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      res.writeHead(500);
+      res.end('Erro ao carregar página');
     }
+
+
   }
 
+
   if (req.url === '/news') {
+
     const items = await fetxml();
+
     let textOutput = "";
     items.forEach(item => {
       textOutput += `KEYWORDS: ${item.title}\n`;
       textOutput += `MORE: ${item.description}\n`;
-      textOutput += `*----------*\n`;
+      textOutput += `*----------*`;
     });
 
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    return res.end(textOutput);
+    res.writeHead(200);
+    res.end(textOutput);
   }
 
-  res.writeHead(404).end('Não encontrado');
-}
+  //=====================================================
 
 
+});
 
+
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
 
