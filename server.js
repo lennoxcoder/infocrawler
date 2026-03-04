@@ -1,8 +1,6 @@
 import http from 'node:http';
 import { readFileSync } from 'fs';
-import fetxml from './fetxml.js'
-
-
+import injectxml from  './injectxml.js'
 
 const server = http.createServer(async (req, res) => {
 
@@ -28,18 +26,11 @@ const server = http.createServer(async (req, res) => {
 
   if (req.url === '/news') {
 
-    const items = await fetxml();
+    const htmlContent = await injectxml();
 
-    let textOutput = "";
-    items.forEach(item => {
-      textOutput += `KEYWORDS: ${item.title}\n`;
-      textOutput += `MORE: ${item.description}\n`;
-      textOutput += `*----------*`;
-    });
-
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.writeHead(200);
-    res.end(textOutput);
+    res.end(htmlContent);
   }
 
   //=====================================================
