@@ -14,8 +14,10 @@
         }
 
         header {
-            padding: 1rem;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5vw;
             background: #082b02;
             font-size: 1.5rem;
             font-weight: bold;
@@ -57,35 +59,37 @@
             opacity: 0.8;
         }
 
+        label {
+            margin: 1rem;
+            font-size: 1rem;            
+        }
+
+        
+
     </style>
 
 </head>
 
+
+
+
 <body>
 
-    <header>Last Tech News</header>
+    <header>
+        <span>Last Tech News</span>
+        <label>lennoxcoder@gmail.com</label>
+        
+    </header>
 
     <div id="snippets">
         <div class="snippet">Press Update Button...</div>
     </div>
 
+    
+
     <button onclick="window.location.href='/news'" class="btn-update">Update</button>
 
+
 </body>
-
-<script>
-
-//====================================================================
-
-function addSnippet(texto) {
-    const div = document.createElement('div');
-    div.className = 'snippet';
-    div.textContent = texto;
-    container.appendChild(div);
-}
-
-
-</script>
-
 
 </html>

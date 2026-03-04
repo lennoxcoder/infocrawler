@@ -12,7 +12,7 @@ const server = http.createServer(async (req, res) => {
       const htmlContent = readFileSync("index.html", 'utf-8');
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.writeHead(200);
-      res.end(htmlContent);
+      return res.end(htmlContent);
     } catch (error) {
       console.error('Erro ao ler index.html:', error);
       res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -30,7 +30,7 @@ const server = http.createServer(async (req, res) => {
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.writeHead(200);
-    res.end(htmlContent);
+    return res.end(htmlContent);
   }
 
   //=====================================================

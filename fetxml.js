@@ -1,5 +1,4 @@
 import { XMLParser } from "fast-xml-parser";
-
 const parser = new XMLParser();
 
 // USAGE
@@ -18,6 +17,7 @@ async function fetxml() {
 
     const xmlData = await response.text();
     let jObj = parser.parse(xmlData);
+
     return jObj.rss.channel.item;
 
 
