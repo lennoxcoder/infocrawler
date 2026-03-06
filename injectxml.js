@@ -8,7 +8,7 @@ async function injectxml(ptlang=false) {
     const htmlContent = readFileSync("index.html", 'utf-8');
     const $ = cheerio.load(htmlContent);
 
-    $('#snippets').empty();
+    $('#snipcontainer').empty();
 
     const items = await fetxml();
     
@@ -27,7 +27,7 @@ async function injectxml(ptlang=false) {
             description = description.text;            
         }
 
-        $('#snippets').append(`
+        $('#snipcontainer').append(`
             <div class="snippet">
                 <strong>${title}</strong>
                 <p>${description}</p>
@@ -38,7 +38,7 @@ async function injectxml(ptlang=false) {
 
 /*
     items.forEach(item => {
-        $('#snippets').append(`
+        $('#snipcontainer').append(`
             <div class="snippet">
                 <strong>${item.title}</strong>
                 <p>${item.description}</p>
