@@ -78,6 +78,9 @@
     <header>
         <span>Last Tech News</span>
         <label>lennoxcoder@gmail.com</label>
+        <label>
+            <input type="checkbox" id="translate"> Traduzir para Pt-Br
+        </label>
         
     </header>
 
@@ -85,11 +88,20 @@
         <div class="snippet">Press Update Button...</div>
     </div>
 
-    
-
-    <button onclick="window.location.href='/news'" class="btn-update">Update</button>
+    <button onclick="calnews()" class="btn-update">Update</button>
 
 
 </body>
+
+<script>
+
+    function calnews() {
+        const checkbox = document.getElementById('translate');
+        ptlang = checkbox.checked;
+        window.location.href = '/news?ptlang=' + ptlang;        
+    }
+
+    
+</script>
 
 </html>

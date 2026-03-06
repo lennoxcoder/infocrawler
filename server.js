@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { readFileSync } from 'fs';
 import injectxml from  './injectxml.js'
+import { parse } from 'url';
 
 const server = http.createServer(async (req, res) => {
 
@@ -24,9 +25,14 @@ const server = http.createServer(async (req, res) => {
   }
 
 
-  if (req.url === '/news') {
+  if (req.url.startsWith('/news')) {
 
-    const htmlContent = await injectxml();
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    let ptlang = url.searchParams.get('ptlang');
+    if(ptlang==='true')  ptlang=true;
+    if(ptlang==='false') ptlang=false;
+
+    const htmlContent = await injectxml(ptlang);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.writeHead(200);

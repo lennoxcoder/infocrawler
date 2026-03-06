@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import fetxml from './fetxml.js'
 import translate from 'google-translate-api-browser';
 
-async function injectxml() {
+async function injectxml(ptlang=false) {
 
     const htmlContent = readFileSync("index.html", 'utf-8');
     const $ = cheerio.load(htmlContent);
@@ -19,11 +19,14 @@ async function injectxml() {
     for (let i = startIndex; i < endIndex; i++) {
         let title = items[i].title;
         let description = items[i].description;
-        title = await translate(title, { to: "pt" });
-        description = await translate(description, { to: "pt" });
-        title = title.text;
-        description = description.text;
-        
+
+        if (ptlang) {            
+            title = await translate(title, { to: "pt" });
+            description = await translate(description, { to: "pt" });
+            title = title.text;
+            description = description.text;            
+        }
+
         $('#snippets').append(`
             <div class="snippet">
                 <strong>${title}</strong>
