@@ -6,9 +6,11 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "cheerio": "^1.2.0",
     "fast-xml-parser": "^5.4.1",
     "google-translate-api-browser": "^5.0.0",
+    "html-to-text": "^9.0.5",
     "url": "^0.11.4"
   }
 }

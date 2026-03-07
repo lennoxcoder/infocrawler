@@ -1,7 +1,6 @@
 import http from 'node:http';
 import { readFileSync } from 'fs';
-import injectxml from  './injectxml.js'
-import { parse } from 'url';
+import gethtmlnews from "./gethtmlnews.js";
 
 const server = http.createServer(async (req, res) => {
 
@@ -27,20 +26,14 @@ const server = http.createServer(async (req, res) => {
 
   if (req.url.startsWith('/news')) {
 
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    let ptlang = url.searchParams.get('ptlang');
-    if(ptlang==='true')  ptlang=true;
-    if(ptlang==='false') ptlang=false;
-
-    const htmlContent = await injectxml(ptlang);
+    const htmlContent = await gethtmlnews();
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.writeHead(200);
     return res.end(htmlContent);
   }
 
-  //=====================================================
-
+  
 
 });
 
@@ -50,3 +43,8 @@ server.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
 
+
+
+// LINHA DE USABILIDADE DAS ROTINAS :
+// server.js --> gethtmlnews() --> fetxml() --> xml2array();
+//  
