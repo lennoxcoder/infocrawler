@@ -1,6 +1,12 @@
 import { XMLParser } from "fast-xml-parser";
 import { convert } from "html-to-text";
-const parser = new XMLParser();
+
+
+const parser = new XMLParser({
+  ignoreAttributes: true,      // ignora atributos XML
+  parseTagValue: false,        // não converte valores automaticamente
+  removeNSPrefix: true         // remove prefixos de namespace
+});
 
 // fetxml.js uses it
 async function xml2array(xmlContent) {
@@ -10,7 +16,7 @@ async function xml2array(xmlContent) {
 
     if (!items || !Array.isArray(items)) {
       console.error('Estrutura XML inválida');
-      return [];
+      return ['Erro ao obter noticia','Tempo limite','https://infocrawler-hyuz.onrender.com/'];
     }
 
     let strArrNews = [];
@@ -39,9 +45,11 @@ async function xml2array(xmlContent) {
     }
 
     return strArrNews;
+
   } catch (error) {
     console.error('Erro ao parsear XML:', error);
-    return [];
+    errorSnippets = ['Erro ao obter noticia','Tempo limite','https://infocrawler-hyuz.onrender.com/'];
+    return errorSnippets;
   }
 }
 

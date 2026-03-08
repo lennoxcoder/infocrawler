@@ -20,7 +20,22 @@ async function gethtmlnews(newsType) {
         'alerta', 'morte', 'caos', 'colapso', 'vazamento', 'vulnerability', 
         'High-Severity Issues'];
 
-    
+    if (items.length===3) {
+
+        let title = items[0];
+        let description = items[1];
+        let link = items[2];
+
+         $('#snipcontainer').append(`
+            <div class="snippet" style="color: red;">
+                <strong>${title}</strong>
+                <p>${description}</p>
+                <button onclick="window.open('${link}', '_blank')">Link Direto</button>
+            </div>
+        `);        
+    } 
+
+
     for (let i = 0; i < items.length-3; i=i+3) {
         
         let title = items[i];
