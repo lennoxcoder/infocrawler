@@ -4,42 +4,44 @@ const parser = new XMLParser();
 
 // fetxml.js uses it
 async function xml2array(xmlContent) {
+  try {
+    let jsonObj = parser.parse(xmlContent);
+    const items = jsonObj.rss?.channel?.item; // Protege contra undefined
 
-  let jsonObj = parser.parse(xmlContent);
-  const items = jsonObj.rss.channel.item;
+    if (!items || !Array.isArray(items)) {
+      console.error('Estrutura XML inválida');
+      return [];
+    }
 
-  let cleanText = "";
-  let title = "";
-  let description = "";
-  let link = "";
-  let strArrNews = [];
+    let strArrNews = [];
 
-  // REMOVENDO CARACTERES INDESEJADOS    
-  items.forEach(item => {
+    items.forEach(item => {
+      try {
+        let title = item.title || '';
+        let description = item.description || '';
+        let link = item.link || '';
 
-    title = item.title;
-    description = item.description;
-    link = item.link;
+        title = convert(title, {
+          wordwrap: false,
+          selectors: [{ selector: 'a', options: { ignoreHref: true } }]
+        });
 
-    title = convert(title, {
-      wordwrap: false,
-      selectors: [{ selector: 'a', options: { ignoreHref: true } }]
+        description = convert(description, {
+          wordwrap: false,
+          selectors: [{ selector: 'a', options: { ignoreHref: true } }]
+        });
+
+        strArrNews.push(title, description, link);
+      } catch (itemError) {
+        console.error('Erro ao processar item:', itemError);
+      }
     });
 
-    description = convert(description, {
-      wordwrap: false,
-      selectors: [{ selector: 'a', options: { ignoreHref: true } }]
-    });
-
-    strArrNews.push(title);
-    strArrNews.push(description);
-    strArrNews.push(link);
-
-  });
-
-  return strArrNews;
-
+    return strArrNews;
+  } catch (error) {
+    console.error('Erro ao parsear XML:', error);
+    return [];
+  }
 }
-
 
 export default xml2array;
