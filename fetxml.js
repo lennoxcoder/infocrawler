@@ -1,13 +1,14 @@
-// FONTES
+// FONTES FIXAS
 // https://rss.tecmundo.com.br/feed
 // https://feeds.feedburner.com/TheHackersNews
 // https://olhardigital.com.br/feed/
 
-import { XMLParser } from "fast-xml-parser";
+import { readdirSync } from 'fs';
+import { extname } from 'path';
 import { readFileSync } from 'fs';
-import { convert } from "html-to-text";
 import xml2array from "./xml2array.js";
-const parser = new XMLParser();
+import { log } from 'console';
+
 
 
 
@@ -19,7 +20,13 @@ async function fetxml(usefile=false) {
     return strArrNews;
   }
 
-  const url = 'https://olhardigital.com.br/feed/';
+  const arrUrl = [
+    'https://olhardigital.com.br/feed/', 
+    'https://feeds.feedburner.com/TheHackersNews',
+    'https://olhardigital.com.br/feed/'
+  ]
+
+  const url = arrUrl[Math.floor(Math.random() * 3)];
 
   try {
     const response = await fetch(url);
@@ -28,8 +35,7 @@ async function fetxml(usefile=false) {
       throw new Error(`Erro HTTP: ${response.status}`);
     }
 
-    const xmlContent = await response.text();
-    
+    const xmlContent = await response.text();    
     const strArrNews = await xml2array(xmlContent);
     return strArrNews;
 
@@ -41,12 +47,35 @@ async function fetxml(usefile=false) {
 // PARA TESTES
 async function readxmlfile() {
 
-  const parser = new XMLParser();
-  const file = 'olhardigital.xml';
+  const file = getFirstXmlFile(); 
+    if (!file) {
+        console.error('Nenhum arquivo .xml encontrado');
+        return [];
+    }
+
+  console.log('File:', file);  
   const xmlContent = readFileSync(file, 'utf-8');
   const strArrNews = await xml2array(xmlContent);
   return strArrNews;
 
+}
+
+
+function getFirstXmlFile(directoryPath = './') {
+    try {
+        const files = readdirSync(directoryPath);
+        
+        for (const file of files) {
+            if (extname(file) === '.xml') {
+                return file; // Retorna o primeiro arquivo .xml encontrado
+            }
+        }
+        
+        return null; // Nenhum arquivo .xml encontrado
+    } catch (error) {
+        console.error('Erro ao ler o diretório:', error);
+        return null;
+    }
 }
 
 

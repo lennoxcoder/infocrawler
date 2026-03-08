@@ -10,8 +10,9 @@ async function gethtmlnews() {
 
     $('#snipcontainer').empty();
 
-    // items is an String Array
+    // PARA TESTES :  const useFile = true; 
     const useFile = false; 
+    // items is an String Array
     const items = await fetxml(useFile);
 
     const windowSize = 5;
@@ -26,7 +27,7 @@ async function gethtmlnews() {
             <div class="snippet">
                 <strong>${title}</strong>
                 <p>${description}</p>
-                <a href="${link}">${link}</a>
+                <button onclick="window.open('${link}', '_blank')">Link Direto</button>
             </div>
         `);
 
