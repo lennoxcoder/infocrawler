@@ -15,8 +15,9 @@ async function xml2array(xmlContent) {
 
     let strArrNews = [];
 
-    items.forEach(item => {
+     for (let i = 0; i < Math.min(5, items.length); i++) {
       try {
+        const item = items[i];
         let title = item.title || '';
         let description = item.description || '';
         let link = item.link || '';
@@ -35,7 +36,7 @@ async function xml2array(xmlContent) {
       } catch (itemError) {
         console.error('Erro ao processar item:', itemError);
       }
-    });
+    }
 
     return strArrNews;
   } catch (error) {
