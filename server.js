@@ -7,7 +7,7 @@ const server = http.createServer(async (req, res) => {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-   if (req.url === '/') {
+  if (req.url === '/') {
 
     try {
       const htmlContent = readFileSync("index.html", 'utf-8');
@@ -27,17 +27,25 @@ const server = http.createServer(async (req, res) => {
   // http://localhost:3000/news?type=TI
   if (req.url.startsWith('/news')) {
 
-    const url = new URL(req.url, `http://${req.headers.host}`);    
-    const newsType = url.searchParams.get('type') || 'TI'; 
-    console.log('newsType:', newsType);
-    const htmlContent = await gethtmlnews(newsType);
+    try {
+      const url = new URL(req.url, `http://${req.headers.host}`);
+      const newsType = url.searchParams.get('type') || 'TI';
+      const htmlContent = await gethtmlnews(newsType);
 
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.writeHead(200);
-    return res.end(htmlContent);
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.writeHead(200);
+      return res.end(htmlContent);
+
+    } catch (error) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.writeHead(500);
+      return res.end('<h1>Erro ao obter notícia</h1><p>Tente novamente em alguns momentos.</p>');
+    }
+
+
   }
 
-  
+
 
 });
 
@@ -47,6 +55,8 @@ server.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
 
+server.keepAliveTimeout = 65000; 
+server.headersTimeout = 66000;
 
 
 // LINHA DE USABILIDADE DAS ROTINAS :
