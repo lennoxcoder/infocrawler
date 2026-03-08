@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { readFileSync } from 'fs';
 import gethtmlnews from "./gethtmlnews.js";
+import { URL } from 'url'; // Adicione esta importação
 
 const server = http.createServer(async (req, res) => {
 
@@ -23,10 +24,13 @@ const server = http.createServer(async (req, res) => {
 
   }
 
-
+  // http://localhost:3000/news?type=TI
   if (req.url.startsWith('/news')) {
 
-    const htmlContent = await gethtmlnews();
+    const url = new URL(req.url, `http://${req.headers.host}`);    
+    const newsType = url.searchParams.get('type') || 'TI'; 
+    console.log('newsType:', newsType);
+    const htmlContent = await gethtmlnews(newsType);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.writeHead(200);

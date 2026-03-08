@@ -10,6 +10,7 @@
     <style>
         body {
             margin: 0;
+            padding: 5px;
             align-items: center;
             font-family: sans-serif;
             font-size: 2rem;
@@ -19,25 +20,24 @@
 
         @media (max-width: 800px) {
             header {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 2px;
-            align-items: center;
-            margin: 0px;
-            padding: 1px;
-            font-weight: bold;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 2px;
+                align-items: center;
+                margin: 20px;
+                padding: 1px;
+                font-weight: bold;
             }
+
             .snippet {
                 font-size: 1rem;
             }
+
             header label {
                 margin: 0;
-                padding : 2px;
-                font-size: 1rem;            
-            }
-            header label:first-of-type {
-                font-size: 2rem;            
+                padding: 2px;
+                font-size: 1rem;
             }
 
         }
@@ -47,23 +47,25 @@
             header {
                 display: flex;
                 justify-content: space-between;
-                margin: 1rem;
+                margin: 10px 30px;
                 align-items: center;
                 padding: 1px;
                 font-weight: bold;
             }
+
             label {
-            margin: 1rem;
-            font-size: 1.5rem;            
+                margin: 1rem;
+                font-size: 1.5rem;
+            }
+
         }
 
-
+        span {
+            font-size: small;
         }
 
-        
         #snipcontainer {
-            max-width: 90vw;
-            margin: 1rem auto;
+            margin: 10px 30px;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
@@ -73,30 +75,44 @@
             background: #e6f5e6;
             color: #092e03;
             border-radius: 4px;
-            padding: 1rem;
+            padding: 0.5rem;
             font-size: 1rem;
             box-shadow: 6px 6px 8px black;
 
         }
 
-        .btn-update {
+        .leftcontainer {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #092e03;
-            background-color: #e6f5e6;
-            border: 1px solid #092e03;
-            border-radius: 8px;
-            margin: auto;
-            padding: 10px 20px;
-            font-weight: bold;
-            cursor: pointer;
-            
+            align-items: center;            
+            gap: 0.25rem;
+            margin: 1rem;
+            padding : 0;            
         }
 
-        
-        
+        .leftcontainer label {
+            font-size: 1rem;
+        }
 
+        select {
+             height: 1.8rem; 
+             font-size: 0.8rem;
+        }
+
+        .btn-update {
+            display: flex;
+            height: 2rem; 
+            font-size: 1rem;
+            white-space: nowrap;
+            justify-content: center;
+            color: #092e03;
+            background-color: #9dec9d;
+            margin-left: 2px;
+            padding: 4px;    
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+
+        }
     </style>
 
 </head>
@@ -107,18 +123,46 @@
 <body>
 
     <header>
-        <label>Last Tech News</label>
-        <label>lennoxcoder@gmail.com</label>
+
+        <div class="leftcontainer">
+            <label for="newsType">Select:</label>
+            <select id="newsType">
+                <option value="TI">TI</option>
+                <option value="Futebol">Futebol</option>
+                <option value="Politica">Política</option>
+            </select>
+            <button onclick="callnews()" class="btn-update">Update</button>
+        </div>
+
+
+        <label id="middle">News</label>
+        <span>lennoxcoder@gmail.com</span>
     </header>
 
     <div id="snipcontainer">
         <div class="snippet">Press Update Button...</div>
     </div>
 
-    <button onclick="window.location.href = '/news'" class="btn-update">Update</button>
+
 
 
 </body>
+
+<script>
+
+    function getSelectedNewsType() {
+        const selectElement = document.getElementById('newsType');
+        const selectedValue = selectElement.value;
+        return selectedValue;
+    }
+
+    function callnews() {        
+        const newsType = getSelectedNewsType();
+        window.location.href = `/news?type=${newsType}`;        
+    }
+
+
+</script>
 
 
 </html>

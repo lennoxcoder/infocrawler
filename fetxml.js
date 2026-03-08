@@ -12,21 +12,31 @@ import { log } from 'console';
 
 
 
-
-async function fetxml(usefile=false) {
+// gethtmlnews.js uses this function
+async function fetxml(newsType, usefile=false) {
 
   if (usefile) {
     let strArrNews = await readxmlfile(); 
     return strArrNews;
   }
 
-  const arrUrl = [
-    'https://olhardigital.com.br/feed/', 
-    'https://feeds.feedburner.com/TheHackersNews',
-    'https://olhardigital.com.br/feed/'
-  ]
+  let urls = [];
 
-  const url = arrUrl[Math.floor(Math.random() * 3)];
+  switch (newsType) {
+    case 'TI':
+      urls = ['https://olhardigital.com.br/feed/','https://feeds.feedburner.com/TheHackersNews','https://olhardigital.com.br/feed/']
+      break;
+    case 'Futebol':
+      urls = ['https://g1.globo.com/rss/g1/esporte/','https://www.espn.com/espn/rss/soccer/news', 'https://tribunadonorte.com.br/category/esportes/feed/']
+      break;
+    default:
+      let googlenews='https://news.google.com/rss/search?q=pol%C3%ADtica+brasil&hl=pt-BR&gl=BR&ceid=BR:pt-419';
+      urls = [googlenews,googlenews,googlenews];
+      break;
+  }
+  
+  
+  const url = urls[Math.floor(Math.random() * 3)];
 
   try {
     const response = await fetch(url);
@@ -67,11 +77,11 @@ function getFirstXmlFile(directoryPath = './') {
         
         for (const file of files) {
             if (extname(file) === '.xml') {
-                return file; // Retorna o primeiro arquivo .xml encontrado
+                return file; 
             }
         }
         
-        return null; // Nenhum arquivo .xml encontrado
+        return null; 
     } catch (error) {
         console.error('Erro ao ler o diretório:', error);
         return null;

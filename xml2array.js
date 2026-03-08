@@ -2,7 +2,7 @@ import { XMLParser } from "fast-xml-parser";
 import { convert } from "html-to-text";
 const parser = new XMLParser();
 
-
+// fetxml.js uses it
 async function xml2array(xmlContent) {
 
   let jsonObj = parser.parse(xmlContent);

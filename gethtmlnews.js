@@ -3,19 +3,23 @@ import { readFileSync } from 'fs';
 import fetxml from './fetxml.js';
 
 
-async function gethtmlnews() {
+async function gethtmlnews(newsType) {
 
     const htmlContent = readFileSync("index.html", 'utf-8');
     const $ = cheerio.load(htmlContent);
 
     $('#snipcontainer').empty();
+    $('#middle').text(newsType);
 
     // PARA TESTES :  const useFile = true; 
     const useFile = false; 
     // items is an String Array
-    const items = await fetxml(useFile);
+    const items = await fetxml(newsType, useFile);
 
-    const windowSize = 5;
+    const keywords = ['bolsonaro', 'lula', 'meteoro', 'cometa', 'extraterrestre', 'alienígena', 
+        'alerta', 'morte', 'caos', 'colapso', 'vazamento', 'vulnerability', 
+        'High-Severity Issues'];
+
     
     for (let i = 0; i < items.length-3; i=i+3) {
         
@@ -23,8 +27,15 @@ async function gethtmlnews() {
         let description = items[i+1];
         let link = items[i+2];
 
+        const hasKeyword = keywords.some(keyword => 
+            title.toUpperCase().includes(keyword.toUpperCase())
+        );    
+
+        let color = hasKeyword ? 'red' : '#0b3d02';
+
+
         $('#snipcontainer').append(`
-            <div class="snippet">
+            <div class="snippet" style="color: ${color};">
                 <strong>${title}</strong>
                 <p>${description}</p>
                 <button onclick="window.open('${link}', '_blank')">Link Direto</button>
