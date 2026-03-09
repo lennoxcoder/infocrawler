@@ -11,17 +11,23 @@ const parser = new XMLParser({
 // fetxml.js uses it
 async function xml2array(xmlContent) {
   try {
+
+    console.log('[xml2array] Trying to parse the file...')
     let jsonObj = parser.parse(xmlContent);
     const items = jsonObj.rss?.channel?.item; // Protege contra undefined
 
     if (!items || !Array.isArray(items)) {
-      console.error('Estrutura XML inválida');
-      return ['Erro ao obter noticia','Tempo limite','https://infocrawler-hyuz.onrender.com/'];
+      console.error('[xml2array] Estrutura XML inválida');
+      console.log('items:', items);
+      return ['[xml2array] Error.','Robot nao voltou no tempo limite. Provavelmente capturado pela esquerda.','https://infocrawler-hyuz.onrender.com/'];
     }
 
-    let strArrNews = [];
+    console.log('[xml2array] Transpiling xml...');
 
-     for (let i = 0; i < Math.min(5, items.length); i++) {
+    let strArrNews = [];
+    const start = Math.floor(Math.random() * (items.length - 5));
+
+    for (let i = start; i < start + 5; i++) {
       try {
         const item = items[i];
         let title = item.title || '';
@@ -44,6 +50,7 @@ async function xml2array(xmlContent) {
       }
     }
 
+    console.log('[xml2array] finished');
     return strArrNews;
 
   } catch (error) {

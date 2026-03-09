@@ -30,6 +30,7 @@ const server = http.createServer(async (req, res) => {
     try {
       const url = new URL(req.url, `http://${req.headers.host}`);
       const newsType = url.searchParams.get('type') || 'TI';
+      console.log('[server] Calling gethtmlnews...........\n');
       const htmlContent = await gethtmlnews(newsType);
 
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -39,7 +40,7 @@ const server = http.createServer(async (req, res) => {
     } catch (error) {
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.writeHead(500);
-      return res.end('<h1>Erro ao obter notícia</h1><p>Tente novamente em alguns momentos.</p>');
+      return res.end('<h1>Erro ao obter notícia</h1><p>Robot com problema.</p>');
     }
 
 

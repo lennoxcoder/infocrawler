@@ -5,88 +5,101 @@
 
 import { readdirSync } from 'fs';
 import { extname } from 'path';
-import { readFileSync } from 'fs';
+import { readFile } from 'fs/promises';
 import xml2array from "./xml2array.js";
-import { log } from 'console';
+import fs from 'fs';
 
 
-
+// Tomar cuidado com xml's muito grandes. Eles podem variar entre 22, e 200 items
 
 // gethtmlnews.js uses this function
-async function fetxml(newsType, usefile=false) {
+async function fetxml(newsType) {
 
-  if (usefile) {
-    let strArrNews = await readxmlfile(); 
-    return strArrNews;
-  }
-
-  let urls = [];
+  let url = '';
 
   switch (newsType) {
     case 'TI':
-      urls = ['https://olhardigital.com.br/feed/','https://feeds.feedburner.com/TheHackersNews','https://olhardigital.com.br/feed/']
+      url = 'https://olhardigital.com.br/feed/';
       break;
     case 'Futebol':
-      urls = ['https://g1.globo.com/rss/g1/esporte/','https://www.espn.com/espn/rss/soccer/news', 'https://tribunadonorte.com.br/category/esportes/feed/']
+      // https://ge.globo.com/Esportes/0,,GEH946-9645,00.html
+      url = 'https://ge.globo.com/Esportes/Rss/0,,AS0-9863,00.xml';
+      url = 'https://ge.globo.com/Esportes/Rss/0,,AS0-9645,00.xml';
       break;
     default:
-      let googlenews='https://news.google.com/rss/search?q=pol%C3%ADtica+brasil&hl=pt-BR&gl=BR&ceid=BR:pt-419';
-      urls = [googlenews,googlenews,googlenews];
+      let googlenews = 'https://news.google.com/rss/search?q=pol%C3%ADtica+brasil&hl=pt-BR&gl=BR&ceid=BR:pt-419';
+      url = googlenews;
       break;
   }
-  
-  
-  const url = urls[Math.floor(Math.random() * 3)];
 
-  try {
-    const response = await fetch(url);
+  const fileName = `./xml/${newsType}.xml`;
+  console.log('[fetxml] Trying to find local XML file...')
 
-    if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
+  // VERIFICA SE JAH EXISTE NO DISCO
+  if (fs.existsSync(fileName)) {
+
+    console.log(`[fetxml] ${fileName} found.`);
+
+    // LE O XML JAH EM DISCO
+    const xmlContent = await readxmlfile(fileName);
+    
+    if (xmlContent) {
+      console.log('[fetxml] XML loaded from file');
+      const strArrNews = await xml2array(xmlContent);
+      return strArrNews;
     }
+    
 
-    const xmlContent = await response.text();    
-    const strArrNews = await xml2array(xmlContent);
-    return strArrNews;
-
-  } catch (error) {
-    console.error('Falha ao buscar notícias:', error);
-  }
-}
-
-// PARA TESTES
-async function readxmlfile() {
-
-  const file = getFirstXmlFile(); 
-    if (!file) {
-        console.error('Nenhum arquivo .xml encontrado');
-        return [];
-    }
-
-  console.log('File:', file);  
-  const xmlContent = readFileSync(file, 'utf-8');
-  const strArrNews = await xml2array(xmlContent);
-  return strArrNews;
-
-}
+  } else {
 
 
-function getFirstXmlFile(directoryPath = './') {
     try {
-        const files = readdirSync(directoryPath);
-        
-        for (const file of files) {
-            if (extname(file) === '.xml') {
-                return file; 
-            }
-        }
-        
-        return null; 
+
+      console.log('[fetxml] Trying to fetch remote XML...');
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      const xmlContent = await response.text();
+      fs.writeFile(fileName, xmlContent, (err) => {
+      if (err) throw err;
+      });
+      console.log('[fetxml] XML saved in server')
+      const strArrNews = await xml2array(xmlContent);
+      return strArrNews;
+
     } catch (error) {
-        console.error('Erro ao ler o diretório:', error);
-        return null;
+      console.error('Falha ao buscar notícias:', error);
+      return [error,'Tempo limite','https://infocrawler-hyuz.onrender.com/'];
     }
+
+    
+  }
+
+
+
+
 }
+
+
+
+async function readxmlfile(fileName) {
+  console.log('[fetxml:readxmlfile] Trying to read XML from file...');
+  try {
+    const xmlContent = await readFile(fileName, 'utf-8');
+    return xmlContent;
+  } catch (error) {
+    console.error('[fetxml:readxmlfile] Erro:', error.message);
+    return null; // Retorna null para indicar falha
+  }
+
+  // Caso continue travando estudar o uso de fs.createReadStream
+
+}
+
+
+
+
 
 
 export default fetxml;

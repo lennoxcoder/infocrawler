@@ -11,10 +11,9 @@ async function gethtmlnews(newsType) {
     $('#snipcontainer').empty();
     $('#middle').text(newsType);
 
-    // PARA TESTES :  const useFile = true; 
-    const useFile = false; 
     // items is an String Array
-    const items = await fetxml(newsType, useFile);
+    console.log('[gethtmlnews] Calling fetxml(newsType)')
+    const items = await fetxml(newsType);
 
     const keywords = ['bolsonaro', 'lula', 'meteoro', 'cometa', 'extraterrestre', 'alienígena', 
         'alerta', 'morte', 'caos', 'colapso', 'vazamento', 'vulnerability', 
