@@ -19,7 +19,7 @@ async function xml2array(xmlContent) {
     if (!items || !Array.isArray(items)) {
       console.error('[xml2array] Estrutura XML inválida');
       console.log('items:', items);
-      return ['[xml2array] Error.','Robot nao voltou no tempo limite. Provavelmente capturado pela esquerda.','https://infocrawler-hyuz.onrender.com/'];
+      return ['[xml2array] Error.', 'Robot nao voltou no tempo limite. Provavelmente capturado pela esquerda.', 'https://infocrawler-hyuz.onrender.com/'];
     }
 
     console.log('[xml2array] Transpiling xml...');
@@ -55,7 +55,7 @@ async function xml2array(xmlContent) {
 
   } catch (error) {
     console.error('Erro ao parsear XML:', error);
-    errorSnippets = ['Erro ao obter noticia','Tempo limite','https://infocrawler-hyuz.onrender.com/'];
+    errorSnippets = ['Erro ao obter noticia', 'Tempo limite', 'https://infocrawler-hyuz.onrender.com/'];
     return errorSnippets;
   }
 }

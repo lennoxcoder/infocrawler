@@ -2,6 +2,7 @@ import http from 'node:http';
 import { readFileSync } from 'fs';
 import gethtmlnews from "./gethtmlnews.js";
 import { URL } from 'url'; // Adicione esta importação
+import fs from 'fs';
 
 const server = http.createServer(async (req, res) => {
 
@@ -49,6 +50,32 @@ const server = http.createServer(async (req, res) => {
 
 
 });
+
+
+
+async function clearcache() {
+  
+  console.log('[server:clearcache] Removing files...');
+  let fileNames = ['./xml/TI.xml', './xml/Futebol.xml', './xml/Politica.xml'];
+  
+  try {
+  
+    const path = './xml';
+    fs.readdir(path, (err, files) => {
+      files.forEach(file => {
+      fs.unlink(`${path}/${file}`, err => { if (err) throw err; });
+      });
+    });       
+
+  } catch (error) {    
+    console.log(error.message);
+  }
+
+  
+}
+
+
+await clearcache();
 
 
 const PORT = 3000;
